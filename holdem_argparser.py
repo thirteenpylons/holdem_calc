@@ -16,10 +16,10 @@ class LibArgs:
 # Parses arguments passed to holdem_calc as a library call
 def parse_lib_args(args):
     error_check_arguments(args)
-    # Parse hole cards and board
-    hole_cards, board = None, None
-    if not args.input:
-        hole_cards, board = parse_cards(args.cards, args.board)
+    hole_cards, board = (
+        (None, None) if args.input else parse_cards(args.cards, args.board)
+    )
+
     return hole_cards, args.n, args.exact, board, args.input
 
 # Parses command line arguments to holdem_calc
@@ -44,10 +44,10 @@ def parse_args():
     # Parse command line arguments and check for errors
     args = parser.parse_args()
     error_check_arguments(args)
-    # Parse hole cards and board
-    hole_cards, board = None, None
-    if not args.input:
-        hole_cards, board = parse_cards(args.cards, args.board)
+    hole_cards, board = (
+        (None, None) if args.input else parse_cards(args.cards, args.board)
+    )
+
     return hole_cards, args.n, args.exact, board, args.input
 
 # Parses a line taken from the input file and returns the hole cards and board
