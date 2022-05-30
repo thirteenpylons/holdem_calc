@@ -63,8 +63,10 @@ def run_simulation(hole_cards, num, exact, given_board, deck, verbose):
                     given_board, winner_list, result_histograms)
     # Go through each parallel data structure and aggregate results
     combined_winner_list, combined_histograms = [0] * (num_players + 1), []
-    for _ in xrange(num_players):
-        combined_histograms.append([0] * len(holdem_functions.hand_rankings))
+    combined_histograms.extend(
+        [0] * len(holdem_functions.hand_rankings) for _ in xrange(num_players)
+    )
+
     for index, element in enumerate(winner_list):
         combined_winner_list[index % (num_players + 1)] += element
     for index, element in enumerate(result_histograms):
@@ -102,8 +104,10 @@ def unknown_simulation(new_hole_cards):
     # Set simulation variables
     num_players = len(hole_cards_list)
     result_histograms, winner_list = [], [0] * (num_players + 1)
-    for _ in xrange(num_players):
-        result_histograms.append([0] * len(holdem_functions.hand_rankings))
+    result_histograms.extend(
+        [0] * len(holdem_functions.hand_rankings) for _ in xrange(num_players)
+    )
+
     hole_cards_list[unknown_index] = new_hole_cards
     deck.remove(new_hole_cards[0])
     deck.remove(new_hole_cards[1])
@@ -157,9 +161,7 @@ def simulation(remaining_board):
     proc_name = multiprocessing.current_process().name
     proc_id = int(proc_name.split("-")[-1]) % multiprocessing.cpu_count()
     # Create results data structure which tracks results of comparisons
-    result_list = []
-    for _ in xrange(num_players):
-        result_list.append([])
+    result_list = [[] for _ in xrange(num_players)]
     # Find the best possible poker hand given the created board and the
     # hole cards and save them in the results data structures
     suit_histogram, histogram, max_suit = (

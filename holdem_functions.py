@@ -33,13 +33,10 @@ class Card:
 def generate_deck(hole_cards, board):
     deck = []
     for suit in reverse_suit_index:
-        for value in val_string:
-            deck.append(Card(value + suit))
+        deck.extend(Card(value + suit) for value in val_string)
     taken_cards = []
     for hole_card in hole_cards:
-        for card in hole_card:
-            if card is not None:
-                taken_cards.append(card)
+        taken_cards.extend(card for card in hole_card if card is not None)
     if board and len(board) > 0:
         taken_cards.extend(board)
     for taken_card in taken_cards:
@@ -267,11 +264,7 @@ def print_results(hole_cards, winner_list, result_histograms):
 # Returns the winning percentages
 def find_winning_percentage(winner_list):
     float_iterations = float(sum(winner_list))
-    percentages = []
-    for num_wins in winner_list:
-        winning_percentage = float(num_wins) / float_iterations
-        percentages.append(winning_percentage)
-    return percentages
+    return [float(num_wins) / float_iterations for num_wins in winner_list]
 
 # Populate provided data structures with results from simulation
 def find_winner(generate_boards, deck, hole_cards, num, board_length,
